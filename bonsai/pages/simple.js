@@ -1,1 +1,0 @@
-/Users/wcastand/Documents/bonsai-ui/stories/simple.js

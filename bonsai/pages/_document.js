@@ -37,6 +37,7 @@ export default class MyDocument extends Document {
     return (
       <html>
         <Head>
+          <link rel="shortcut icon" type="image/x-icon" href="/static/favicon.ico" />
           <link rel="stylesheet" href="/static/dracula.css" />
           <style dangerouslySetInnerHTML={{ __html: this.props.css }} />
         </Head>

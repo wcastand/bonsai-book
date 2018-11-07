@@ -5,9 +5,9 @@
   "author": "wcastand <wcastand@gmail.com> (https://github.com/wcastand)",
   "license": "MIT",
   "scripts": {
-    "dev": "node index.js",
+    "dev": "node bonsai/server.js",
     "build": "next build",
-    "start": "NODE_ENV=production node index.js"
+    "start": "NODE_ENV=production node bonsai/server.js"
   },
   "dependencies": {
     "emotion": "^9.2.12",
