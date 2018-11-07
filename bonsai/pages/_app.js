@@ -28,6 +28,7 @@ export default class MyApp extends App {
 
   render() {
     const { Component, pageProps, routes, currentPage } = this.props
+    console.log(routes)
     const source = currentPage !== '/' ? routes.filter(r => r.route === currentPage)[0].src : ''
     return (
       <Container>
