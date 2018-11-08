@@ -1,11 +1,11 @@
 {
-  "name": "bonsai",
+  "name": "bonsai-book",
   "version": "1.0.0",
   "main": "index.js",
   "author": "wcastand <wcastand@gmail.com> (https://github.com/wcastand)",
   "license": "MIT",
   "bin": {
-    "bonsai": "./cli.js"
+    "bonsai-book": "./cli.js"
   },
   "dependencies": {
     "chokidar": "^2.0.4",

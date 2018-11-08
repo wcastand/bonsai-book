@@ -5,6 +5,6 @@
   "author": "wcastand <wcastand@gmail.com> (https://github.com/wcastand)",
   "license": "MIT",
   "scripts": {
-    "start": "bonsai start"
+    "start": "bonsai-book start"
   }
 }
