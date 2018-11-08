@@ -6,7 +6,7 @@ module.exports = stories_dir => {
   const fixPaths = content => {
     const new_content = content.replace(/(from ['|"])([\.].*)(['|"])/gm, (match, p1, p2, p3) => {
       const old_path = path.resolve(stories_dir, p2)
-      const pages_dir = path.resolve(process.cwd(), 'bonsai/pages')
+      const pages_dir = path.resolve(__dirname, 'pages')
       const new_path = path.relative(pages_dir, old_path)
       return `${p1}${new_path}${p3}`
     })
@@ -18,12 +18,12 @@ module.exports = stories_dir => {
     const file_content = fs.readFileSync(src, 'UTF-8')
     const fixed_content = fixPaths(file_content)
 
-    const dest = path.resolve(process.cwd(), 'bonsai/pages', path.relative(stories_dir, file_path))
+    const dest = path.resolve(__dirname, 'pages', path.relative(stories_dir, file_path))
     fs.createWriteStream(dest, 'UTF-8').write(fixed_content)
   }
 
   const createDir = dir_path => {
-    const dest = path.resolve(process.cwd(), 'bonsai/pages', path.relative(stories_dir, dir_path))
+    const dest = path.resolve(__dirname, 'pages', path.relative(stories_dir, dir_path))
     if (!fs.existsSync(dest))
       fs.mkdir(dest, err => (err ? console.error(err) : console.info('direction created')))
   }

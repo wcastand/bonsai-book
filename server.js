@@ -9,11 +9,10 @@ const watcher = require('./watcher')
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
-console.log(dev)
-const app = next({ dev, dir: './bonsai', quiet: true })
+const app = next({ dev, dir: __dirname, quiet: true })
 const handle = app.getRequestHandler()
 
-const dir = path.resolve(process.cwd(), 'bonsai/pages')
+const dir = path.resolve(__dirname, 'pages')
 
 module.exports = stories_dir => {
   const stopWatch = watcher(stories_dir)
@@ -26,20 +25,24 @@ module.exports = stories_dir => {
       return { route, name, src }
     })
   }
-  app.prepare().then(() => {
-    const server = express()
-    server.get('/stories', (req, res) => res.send(getStories()))
-    server.get('*', (req, res) => {
-      return handle(req, res)
-    })
+  return {
+    start: () => {
+      app.prepare().then(() => {
+        const server = express()
+        server.get('/stories', (req, res) => res.send(getStories()))
+        server.get('*', (req, res) => {
+          return handle(req, res)
+        })
 
-    server.listen(port, err => {
-      if (err) {
-        stopWatch()
-        throw err
-      }
-      console.log(`> Ready on http://localhost:${port}`)
-    })
-  })
-  return app
+        server.listen(port, err => {
+          if (err) {
+            stopWatch()
+            throw err
+          }
+          console.log(`> Ready on http://localhost:${port}`)
+        })
+      })
+      return app
+    },
+  }
 }
