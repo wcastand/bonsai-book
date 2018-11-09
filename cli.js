@@ -19,7 +19,7 @@ $ bonsai export
 )
 
 const project_dir = path.resolve(process.cwd(), './.bonsai')
-const src_dir = path.resolve(__dirname, './.bonsai')
+const src_dir = path.resolve(__dirname, './src')
 const lauch = () => {
   const bonsai = require(project_dir + '/server')
   switch (cli.input[0]) {
