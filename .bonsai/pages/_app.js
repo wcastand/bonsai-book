@@ -15,20 +15,35 @@ const Layout = styled('div')`
 `
 
 export default class MyApp extends App {
+  state = { routes: [] }
   static async getInitialProps({ Component, router, ctx }) {
-    const routes = await fetch('http://localhost:3000/stories').then(res => res.json())
     let pageProps = {}
 
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx)
     }
 
-    return { pageProps, routes, currentPage: ctx.asPath }
+    return { pageProps, currentPage: ctx.asPath }
+  }
+  fetchRoutes = () => {
+    return fetch('http://localhost:3000/stories')
+      .then(res => res.json())
+      .then(routes => this.setState({ routes }))
   }
 
+  componentDidMount() {
+    this.fetchRoutes()
+  }
+  componentWillUpdate() {
+    this.fetchRoutes()
+  }
   render() {
-    const { Component, pageProps, routes, currentPage } = this.props
-    const source = currentPage !== '/' ? routes.filter(r => r.route === currentPage)[0].src : ''
+    const { Component, pageProps, currentPage } = this.props
+    const { routes } = this.state
+    const source =
+      currentPage !== '/' && routes.length !== 0
+        ? routes.filter(r => r.route === currentPage)[0].src
+        : ''
     return (
       <Container>
         <Layout>
