@@ -1,39 +1,32 @@
 #!/usr/bin/env node
 'use strict'
 const meow = require('meow')
+const fs = require('fs')
+const path = require('path')
+const ncp = require('ncp')
+
 require('niceuho')
 
-const bonsai = require('./server')
+const project_dir = path.resolve(process.cwd(), './.bonsai')
+if (!fs.existsSync(project_dir)) ncp('./.bonsai', project_dir)
+
+const bonsai = require(project_dir + '/server')
 
 const cli = meow(
   `
 	Usage
 	  $ bonsai <input>
 
-	Options
-	  --dir, -d  Directory of the stories (default: ./stories)
-	  --output, -o  Directory for the output (default: ./bonsai)
-
 	Examples
-    $ bonsai start -d ./stories
-    $ bonsai export -o ./dist
+    $ bonsai start
+    $ bonsai export
 `,
-  {
-    flags: {
-      dir: {
-        type: 'string',
-        alias: 'd',
-        default: './stories',
-      },
-      output: {
-        type: 'string',
-        alias: 'o',
-        default: './bonsai',
-      },
-    },
-  },
 )
-const app = bonsai(cli.flags.dir)
 
-if (cli.input[0] === 'start') app.start()
-else if (cli.input[0] === 'export') app.export(cli.flags.output)
+switch (cli.input[0]) {
+  case 'start':
+  default:
+    bonsai()
+    break
+}
+// else if (cli.input[0] === 'export') app.export(cli.flags.output)
