@@ -1,6 +1,6 @@
 {
   "name": "bonsai-book",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "main": "index.js",
   "author": "wcastand <wcastand@gmail.com> (https://github.com/wcastand)",
   "license": "MIT",
