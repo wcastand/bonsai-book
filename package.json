@@ -10,12 +10,6 @@
   "scripts": {
     "start": "node ./cli.js"
   },
-  "files": [
-    ".bonsai",
-    "package.json",
-    "cli.js",
-    "README.md"
-  ],
   "dependencies": {
     "chokidar": "^2.0.4",
     "emotion": "^9.2.12",
