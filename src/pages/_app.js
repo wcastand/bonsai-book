@@ -1,6 +1,7 @@
 import React from 'react'
 import App, { Container } from 'next/app'
 import styled from 'react-emotion'
+import io from 'socket.io-client'
 import 'isomorphic-fetch'
 
 import Panel from '../c/panel'
@@ -15,7 +16,6 @@ const Layout = styled('div')`
 `
 
 export default class MyApp extends App {
-  state = { routes: [] }
   static async getInitialProps({ Component, router, ctx }) {
     let pageProps = {}
 
@@ -25,29 +25,36 @@ export default class MyApp extends App {
 
     return { pageProps, currentPage: ctx.asPath }
   }
-  fetchRoutes = () => {
-    return fetch('http://localhost:3000/stories')
-      .then(res => res.json())
-      .then(routes => this.setState({ routes }))
-  }
+  state = { socket: null, stories: [], tree: [] }
 
   componentDidMount() {
-    this.fetchRoutes()
+    const socket = io()
+    this.setState({ socket })
   }
-  componentWillUpdate() {
-    this.fetchRoutes()
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.socket !== this.state.socket) {
+      nextState.socket.on('stories', this.handleStories)
+    }
   }
+
+  componentWillUnmount() {
+    this.state.socket.off('stories', this.handleStories)
+    this.state.socket.close()
+  }
+
+  handleStories = res => this.setState(res)
+
   render() {
     const { Component, pageProps, currentPage } = this.props
-    const { routes } = this.state
+    const { stories, tree } = this.state
     const source =
-      currentPage !== '/' && routes.length !== 0
-        ? routes.filter(r => r.route === currentPage)[0].src
+      currentPage !== '/' && stories.length !== 0
+        ? stories.filter(r => r.path === currentPage)[0].src
         : ''
     return (
       <Container>
         <Layout>
-          <Panel routes={routes} />
+          <Panel {...{ stories, tree }} />
           <Preview showSrc={currentPage !== '/'} source={source}>
             <Component {...pageProps} />
           </Preview>
