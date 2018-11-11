@@ -1,22 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import styled from 'react-emotion'
 
+import Logo from './logo'
+import Dir from './tree/dir'
+import File from './tree/file'
+
 const Container = styled('div')`
-  width: 250px;
+  z-index: 99;
+  min-width: 250px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  background-color: #f8f8f8;
-  border-right: 1px solid #ef8354;
-`
-
-const SubContainer = styled('div')`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 `
 
 const Menu = styled('div')`
@@ -29,57 +27,24 @@ const Menu = styled('div')`
   padding-left: 24px;
 `
 
-const SubMenu = styled('div')`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin: 0;
-  padding-left: 24px;
-`
-
-const Item = styled('a')`
-  display: flex;
-  text-decoration: none;
-  padding: 8px;
-  cursor: pointer;
-  font-size: 16px;
-`
-
-const Title = styled('h5')`
-  display: flex;
-  text-decoration: none;
-  margin: 0;
-  padding: 8px;
-  font-size: 18px;
-  font-weight: 700;
-`
-
-export default ({ stories, tree }) => {
+export default ({ stories, tree, currentPage }) => {
   const makeMenu = t =>
     t.map(id => {
       if (Array.isArray(id)) {
         const dir = stories.find(story => story.id === id[0])
-        return (
-          <SubContainer key={`menu_item_${dir.name}`}>
-            <Title>{dir.name}</Title>
-            <SubMenu>{makeMenu(id[1])}</SubMenu>
-          </SubContainer>
-        )
+        const name = dir.name
+        const tree = makeMenu(id[1])
+        return <Dir key={`dir_${name}`} {...{ name, tree }} />
       } else {
         const file = stories.find(story => story.id === id)
-        return (
-          <Link href={file.path} key={`menu_item_${id}`}>
-            <Item>{file.name}</Item>
-          </Link>
-        )
+        const active = currentPage === file.path
+        return <File key={`dir_item_${id}`} {...{ file, active, id }} />
       }
     })
+
   return (
     <Container>
-      <Link href="/">
-        <Item big>Bonsai UI</Item>
-      </Link>
+      <Logo src="/static/logo.svg" />
       <Menu>{makeMenu(tree)}</Menu>
     </Container>
   )

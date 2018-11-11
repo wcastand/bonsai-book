@@ -1,35 +1,44 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'react-emotion'
-import Highlight from 'react-highlight'
+import { FiCode } from 'react-icons/fi'
+
+import Code from './code'
 
 const Container = styled('div')`
-  flex: 1;
+  position: relative;
+  flex: 2;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: stretch;
   overflow: auto;
-  background-color: #f8f8f8;
+  background-color: #fff;
 `
 
 const Show = styled('div')`
+  z-index: 1;
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 `
 
-const Code = styled(Highlight)`
-  flex: 1;
-  padding: 24px;
-  font-size: 14px;
+const CodeIcon = styled(FiCode)`
+  z-index: 10;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
 `
 
-const Preview = ({ showSrc, source, ...props }) => {
+const Preview = ({ source, ...props }) => {
+  const [showCode, toggleCode] = useState(false)
   return (
     <Container>
+      {source !== null && <Code source={source} show={showCode} />}
       <Show {...props} />
-      {showSrc && <Code className="javascript">{source}</Code>}
+      {source !== null && <CodeIcon onClick={() => toggleCode(!showCode)} />}
     </Container>
   )
 }

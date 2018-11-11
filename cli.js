@@ -4,8 +4,44 @@ const meow = require('meow')
 const fs = require('fs')
 const path = require('path')
 const ncp = require('ncp')
+const chokidar = require('chokidar')
 
-require('niceuho')
+const dev = process.env.NODE_ENV !== 'production'
+const conf_path = path.resolve(process.cwd(), '../bonsai.config.js')
+const config = fs.existsSync(conf_path)
+  ? require(conf_path)
+  : {
+      stories_dir: './stories',
+      output_dir: './output',
+    }
+
+const project_dir = path.resolve(process.cwd(), './.bonsai')
+const src_dir = path.resolve(__dirname, './src')
+
+const bonsai = require(project_dir + '/server')
+const watcher = require(project_dir + '/watcher')
+
+const copySrcFiles = file_path => {
+  const src_dir = path.resolve(process.cwd(), './src')
+  const src = path.resolve(process.cwd(), file_path)
+  const file_content = fs.readFileSync(src, 'UTF-8')
+
+  const dest = path.resolve(process.cwd(), './.bonsai', path.relative(src_dir, file_path))
+  fs.createWriteStream(dest, 'UTF-8').write(file_content)
+}
+const createSrcDir = dir_path => {
+  const src_dir = path.resolve(process.cwd(), './src')
+  const dest = path.resolve(process.cwd(), './.bonsai', path.relative(src_dir, dir_path))
+  if (!fs.existsSync(dest))
+    fs.mkdir(dest, err => (err ? console.error(err) : console.info('direction created')))
+}
+if (dev) {
+  const dev_watcher = chokidar.watch('./src/**/*')
+  dev_watcher
+    .on('add', copySrcFiles)
+    .on('change', copySrcFiles)
+    .on('addDir', createSrcDir)
+}
 
 const cli = meow(
   `
@@ -14,44 +50,13 @@ $ bonsai <input>
 
 Examples
 $ bonsai start
-$ bonsai export
 `,
 )
 
-const project_dir = path.resolve(process.cwd(), './.bonsai')
-const src_dir = path.resolve(__dirname, './src')
-
-const lauch = () => {
-  const bonsai = require(project_dir + '/server')
-  switch (cli.input[0]) {
-    case 'start':
-    default:
-      bonsai()
-      break
-  }
+switch (cli.input[0]) {
+  case 'start':
+  default:
+    bonsai()
+    watcher(config)
+    break
 }
-
-function rimraf(dir_path) {
-  if (fs.existsSync(dir_path)) {
-    fs.readdirSync(dir_path).forEach(function(entry) {
-      var entry_path = path.join(dir_path, entry)
-      if (fs.lstatSync(entry_path).isDirectory()) {
-        rimraf(entry_path)
-      } else {
-        fs.unlinkSync(entry_path)
-      }
-    })
-    fs.rmdirSync(dir_path)
-  }
-}
-
-rimraf(project_dir)
-if (!fs.existsSync(project_dir)) {
-  ncp(src_dir, project_dir, err => {
-    if (err) return console.error(err)
-    lauch()
-  })
-} else {
-  lauch()
-}
-// else if (cli.input[0] === 'export') app.export(cli.flags.output)

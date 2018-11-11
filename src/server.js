@@ -10,8 +10,6 @@ const shortid = require('shortid')
 
 const watcher = require('./watcher')
 const conf_path = path.resolve(process.cwd(), '../bonsai.config.js')
-const dir = path.resolve(process.cwd(), './.bonsai', 'pages')
-
 const config = fs.existsSync(conf_path)
   ? require(conf_path)
   : {
@@ -19,14 +17,14 @@ const config = fs.existsSync(conf_path)
       output_dir: './output',
     }
 
-const stories_dir = path.resolve(process.cwd(), config.stories_dir)
-
-const stopWatch = watcher()
-
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
+const dir = path.resolve(process.cwd(), './.bonsai', 'pages')
+const stories_dir = path.resolve(process.cwd(), config.stories_dir)
+
 const nextApp = next({ dev, dir: './.bonsai', quiet: false })
 const handle = nextApp.getRequestHandler()
+const stopWatch = watcher(config)
 
 const getSubTree = () => {
   const stories = []
@@ -53,21 +51,21 @@ const getSubTree = () => {
   return { tree, stories }
 }
 
-module.exports = () => {
+const initSocket = () => {
   const emit_stories = () => {
     io.emit('stories', getSubTree(), {
       for: 'everyone',
     })
   }
-  const watcher = chokidar.watch(`${config.stories_dir}/**/*`, { persistent: true })
+  const socket_watcher = chokidar.watch(`${config.stories_dir}/**/*`)
 
-  watcher.on('change', emit_stories)
+  socket_watcher.on('change', emit_stories)
   io.on('connection', emit_stories)
+}
 
+module.exports = () => {
+  initSocket()
   nextApp.prepare().then(() => {
-    // app.get('/stories', (req, res) =>
-    //   res.send(getSubTree(path.resolve(process.cwd(), config.stories_dir))),
-    // )
     app.get('*', (req, res) => {
       return handle(req, res)
     })
