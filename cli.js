@@ -6,7 +6,7 @@ const path = require('path')
 const ncp = require('ncp')
 const chokidar = require('chokidar')
 
-const { project_dir, src_dir, createSrcDir, copySrcFiles } = require('./cli_utils')
+const { project_dir, createSrcDir, copySrcFiles } = require('./cli_utils')
 
 const dev = process.env.NODE_ENV !== 'production'
 

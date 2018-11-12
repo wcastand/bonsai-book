@@ -24,9 +24,8 @@ const createSrcDir = dir_path => {
     fs.mkdir(dest, err => (err ? console.error(err) : console.info('direction created')))
 }
 
-module.exports = {
+module.exports = {
   project_dir,
-  src_dir,
   createSrcDir,
   copySrcFiles,
 }
