@@ -5,6 +5,7 @@ import styled from 'react-emotion'
 import Logo from './logo'
 import Dir from './tree/dir'
 import File from './tree/file'
+import SearchBar from './searchbar'
 
 const Container = styled('div')`
   z-index: 99;
@@ -28,23 +29,30 @@ const Menu = styled('div')`
 `
 
 export default ({ stories, tree, currentPage }) => {
+  const [input, setInput] = useState('')
+  const filteredStories = stories.filter(story => story.name.includes(input))
   const makeMenu = t =>
     t.map(id => {
       if (Array.isArray(id)) {
-        const dir = stories.find(story => story.id === id[0])
-        const name = dir.name
-        const tree = makeMenu(id[1])
-        return <Dir key={`dir_${name}`} {...{ name, tree }} />
+        const dir = filteredStories.find(story => story.id === id[0])
+        if (dir) {
+          const name = dir.name
+          const tree = makeMenu(id[1])
+          return <Dir key={`dir_${name}`} {...{ name, tree }} />
+        }
       } else {
-        const file = stories.find(story => story.id === id)
-        const active = currentPage === file.path
-        return <File key={`dir_item_${id}`} {...{ file, active, id }} />
+        const file = filteredStories.find(story => story.id === id)
+        if (file) {
+          const active = currentPage === file.path
+          return <File key={`dir_item_${id}`} {...{ file, active, id }} />
+        }
       }
     })
 
   return (
     <Container>
       <Logo src="/static/logo.svg" />
+      <SearchBar {...{ input, setInput }} />
       <Menu>{makeMenu(tree)}</Menu>
     </Container>
   )

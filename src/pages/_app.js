@@ -3,10 +3,16 @@ import App, { Container } from 'next/app'
 import { IconContext } from 'react-icons'
 import styled from 'react-emotion'
 import io from 'socket.io-client'
+import preval from 'preval.macro'
 import 'isomorphic-fetch'
 
 import Panel from '../c/panel'
 import Preview from '../c/preview'
+
+const default_stories = preval`
+const { getSubTree } = require('../utils')
+module.exports = getSubTree()
+`
 
 const Layout = styled('div')`
   display: flex;
@@ -17,8 +23,8 @@ const Layout = styled('div')`
 `
 
 const MyApp = ({ Component, pageProps, currentPage }) => {
-  const [stories, setStories] = useState([])
-  const [tree, setTree] = useState([])
+  const [stories, setStories] = useState(default_stories.stories || [])
+  const [tree, setTree] = useState(default_stories.tree || [])
 
   const handleStories = res => {
     setStories(res.stories)

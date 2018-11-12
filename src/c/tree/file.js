@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
+import isPropValid from '@emotion/is-prop-valid'
 import styled from 'react-emotion'
 import { FiFile } from 'react-icons/fi'
 
@@ -20,12 +21,12 @@ const Item = styled('a')`
   user-select: none;
 `
 
-const Icon = styled(FiFile)`
+const Icon = styled(FiFile, { shouldForwardProp: prop => isPropValid(prop) && prop !== 'active' })`
   transform: scaleY(1.1);
   color: ${({ active }) => (active ? '#028F76' : '#282a36')};
 `
 
-export default ({ id, file, active }) => {
+const File = ({ id, file, active }) => {
   return (
     <Link href={file.path}>
       <Container>
@@ -35,3 +36,5 @@ export default ({ id, file, active }) => {
     </Link>
   )
 }
+
+export default File

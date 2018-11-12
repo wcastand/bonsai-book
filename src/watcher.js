@@ -2,7 +2,10 @@ const chokidar = require('chokidar')
 const fs = require('fs')
 const path = require('path')
 
-const fixPaths = (stories_dir, content) => {
+const config = require('../config')
+const stories_dir = path.resolve(process.cwd(), config.stories_dir)
+
+const fixPaths = content => {
   const new_content = content.replace(/(from ['|"])([\.].*)(['|"])/gm, (match, p1, p2, p3) => {
     const old_path = path.resolve(stories_dir, p2)
     const pages_dir = path.resolve(process.cwd(), './.bonsai', 'pages')
@@ -12,10 +15,10 @@ const fixPaths = (stories_dir, content) => {
   return new_content
 }
 
-const copyfile = stories_dir => file_path => {
+const copyfile = file_path => {
   const src = path.resolve(process.cwd(), file_path)
   const file_content = fs.readFileSync(src, 'UTF-8')
-  const fixed_content = fixPaths(stories_dir, file_content)
+  const fixed_content = fixPaths(file_content)
 
   const dest = path.resolve(
     process.cwd(),
@@ -26,7 +29,7 @@ const copyfile = stories_dir => file_path => {
   fs.createWriteStream(dest, 'UTF-8').write(fixed_content)
 }
 
-const createDir = stories_dir => dir_path => {
+const createDir = dir_path => {
   const dest = path.resolve(
     process.cwd(),
     './.bonsai',
@@ -37,19 +40,14 @@ const createDir = stories_dir => dir_path => {
     fs.mkdir(dest, err => (err ? console.error(err) : console.info('direction created')))
 }
 
-module.exports = config => {
-  const watcher = chokidar.watch(`${config.stories_dir}/**/*`, { persistent: true })
+module.exports = (cb = () => {}) => {
+  const watcher = chokidar.watch(`${stories_dir}/**/*`, { persistent: true })
   // Add event listeners.
   watcher
-    .on('add', copyfile(config.stories_dir))
-    .on('change', copyfile(config.stories_dir))
-    .on('addDir', createDir(config.stories_dir))
-  // .on('unlink', path => log(`File ${path} has been removed`))
-  //   .on('unlinkDir', path => log(`Directory ${path} has been removed`))
-
-  watcher
-    .on('ready', () => console.info('Initial scan complete. Ready for changes'))
-    .on('error', error => console.error(`Watcher error: ${error}`))
+    .on('add', copyfile)
+    .on('change', copyfile)
+    .on('addDir', createDir)
+  watcher.on('ready', cb).on('error', error => console.error(`Watcher error: ${error}`))
 
   // Stop watching.
   return () => watcher.close()
