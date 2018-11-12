@@ -21,7 +21,6 @@ const MyApp = ({ Component, pageProps, currentPage }) => {
   const [tree, setTree] = useState([])
 
   const handleStories = res => {
-    console.log('receive stories')
     setStories(res.stories)
     setTree(res.tree)
   }
