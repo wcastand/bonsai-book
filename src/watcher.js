@@ -37,7 +37,7 @@ const createDir = dir_path => {
     path.relative(stories_dir, dir_path),
   )
   if (!fs.existsSync(dest))
-    fs.mkdir(dest, err => (err ? console.error(err) : console.info('direction created')))
+    fs.mkdir(dest, err => (err ? console.error(err) : console.info('directory created')))
 }
 
 module.exports = (cb = () => {}) => {
