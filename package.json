@@ -8,7 +8,8 @@
     "bonsai-book": "./cli.js"
   },
   "scripts": {
-    "start": "node ./cli.js"
+    "dev": "NODE_ENV=devmode node ./cli.js",
+    "start": "NODE_ENV=development node ./cli.js"
   },
   "devDependencies": {
     "babel-plugin-macros": "^2.4.2",
