@@ -13,15 +13,7 @@ const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
 const stories_dir = path.resolve(process.cwd(), config.stories_dir)
 
-const next_conf = {
-  ...config.next_config,
-  webpack: (config, { buildId, dev }) => {
-    config.resolve.symlinks = false
-    return config
-  },
-}
-
-const nextApp = next({ dev, dir: './.bonsai', conf: next_conf })
+const nextApp = next({ dev, dir: './.bonsai', conf: config.next_config })
 const handle = nextApp.getRequestHandler()
 const stopWatch = watcher()
 
