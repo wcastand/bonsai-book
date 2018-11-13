@@ -2,7 +2,7 @@ const chokidar = require('chokidar')
 const fs = require('fs')
 const path = require('path')
 
-const config = require('../config')
+const config = require('./config')
 const stories_dir = path.resolve(process.cwd(), config.stories_dir)
 
 const fixPaths = content => {
