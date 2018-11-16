@@ -26,13 +26,10 @@ if (!fs.existsSync(project_dir)) {
 
 const launchBonsai = () => {
   const bonsai = require(project_dir + '/server')
-  const watcher = require(project_dir + '/watcher')
   switch (cli.input[0]) {
     case 'start':
     default:
-      watcher(() => {
-        bonsai()
-      })
+      bonsai()
       break
   }
 }

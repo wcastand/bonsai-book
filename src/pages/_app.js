@@ -39,7 +39,6 @@ const MyApp = ({ Component, pageProps, currentPage }) => {
       socket.close()
     }
   }, [])
-
   const source =
     currentPage !== '/' && stories.length !== 0
       ? stories.filter(r => r.path === currentPage)[0].src
