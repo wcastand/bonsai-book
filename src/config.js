@@ -7,7 +7,7 @@ const config = fs.existsSync(conf_path)
   : {
       stories_dir: './stories',
       output_dir: './output',
-      next_config: {},
+      next: {},
     }
 
 module.exports = config

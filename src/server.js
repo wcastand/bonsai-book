@@ -6,6 +6,7 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 
 const config = require('./config')
+const webpackConfig = require('./webpack.config')
 const watcher = require('./watcher')
 const { getSubTree } = require('./utils')
 
@@ -13,7 +14,12 @@ const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
 const stories_dir = path.resolve(process.cwd(), config.stories_dir)
 
-const nextApp = next({ dev, dir: './.bonsai', conf: config.next_config })
+const custom_config = {
+  ...config.next,
+  ...webpackConfig,
+}
+
+const nextApp = next({ dev, dir: './.bonsai', conf: custom_config })
 const handle = nextApp.getRequestHandler()
 const stopWatch = watcher()
 
