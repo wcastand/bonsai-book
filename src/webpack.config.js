@@ -12,11 +12,9 @@ module.exports = {
       use: defaultLoaders.babel,
       include: [internalNodeModulesRegExp],
     })
-    console.log(webpackConfig.module)
     webpackConfig.module.rules.forEach(mod => {
       mod.include.push(process.cwd())
     })
-    // webpackConfig.resolveLoader.modules.push(process.cwd())
     return webpackConfig
   },
 }
