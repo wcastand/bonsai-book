@@ -7,9 +7,8 @@ const config = {
   stories_dir: './stories',
   output_dir: './output',
   next: {},
-  webpack: {
-    include: [process.cwd()],
-  },
+  include: [process.cwd()],
+  webpack: () => {},
   ...customConfig,
 }
 

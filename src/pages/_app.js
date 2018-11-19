@@ -35,9 +35,9 @@ const MyApp = ({ Component, pageProps, currentPage }) => {
     const currentStory =
       currentPage !== '/' && stories.length !== 0 ? stories.find(r => r.path === currentPage) : null
 
-    if (currentStory.isDir && currentStory.hasIndex)
+    if (currentStory !== null && currentStory.isDir && currentStory.hasIndex)
       return stories.find(r => r.path === currentStory.path + '/index').src
-    if (!currentStory.isDir) return currentStory.src
+    if (currentStory !== null && !currentStory.isDir) return currentStory.src
     return null
   }
 
