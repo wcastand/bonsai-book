@@ -1,7 +1,9 @@
 <p align="center">
-  <img src="/src/static/logo.png" alt="Bonsai"/>
-  <span align="center" style="font-weight:bold;font-size:35px;">Bonsai Book</span>
+  <img src="/src/static/logo.png" alt="Bonsai" height="150px"/>
+  <br>
+  <h1 align="center">Bonsai Book</h1>
 </p>
+
 
 ## Introduction
 
