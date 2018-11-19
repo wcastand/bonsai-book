@@ -13,11 +13,13 @@ const getSubTree = () => {
     const s = fs.lstatSync(p)
     const name = f.replace(ext, '')
     const isDir = s.isDirectory()
+    const hasIndex = isDir && fs.readdirSync(p).includes('index.js')
     stories.push({
       id,
       name,
       path: rp,
       isDir,
+      hasIndex,
       ...(!isDir && { src: fs.readFileSync(p, 'UTF-8') }),
     })
     return isDir ? [id, fs.readdirSync(p).map(traverse(p))] : id

@@ -35,7 +35,8 @@ const launchBonsai = () => {
 }
 
 if (superDev) {
-  const dev_watcher = chokidar.watch('./src/**/*')
+  console.log('super dev mode')
+  const dev_watcher = chokidar.watch(path.resolve(__dirname, './src/**/*'))
   dev_watcher
     .on('add', copySrcFiles)
     .on('change', copySrcFiles)

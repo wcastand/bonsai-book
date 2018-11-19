@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'react-emotion'
+import Link from 'next/link'
 import { FiFolderPlus, FiFolderMinus } from 'react-icons/fi'
 
 const SubContainer = styled('div')`
@@ -24,31 +25,41 @@ const FolderTitleContainer = styled('div')`
   justify-content: center;
   align-items: center;
 `
-const Title = styled('h5')`
+const Title = styled('a')`
   display: flex;
   text-decoration: none;
   margin: 1px;
   padding: 8px;
   font-size: 16px;
   font-weight: 700;
-  color: #282a36;
+  color: ${({ active }) => (active ? '#028F76' : '#282a36')};
   cursor: pointer;
   user-select: none;
 `
 
-const FolderTitle = ({ setUnfold, name, unfold }) => {
+const FolderTitle = ({ unfold, setUnfold, active, dir: { name, hasIndex, path } }) => {
   return (
-    <FolderTitleContainer onClick={() => setUnfold(!unfold)}>
-      {unfold ? <FiFolderMinus size={16} /> : <FiFolderPlus size={16} />}
-      <Title>{name}</Title>
+    <FolderTitleContainer>
+      {unfold ? (
+        <FiFolderMinus size={16} onClick={() => setUnfold(!unfold)} />
+      ) : (
+        <FiFolderPlus size={16} onClick={() => setUnfold(!unfold)} />
+      )}
+      {hasIndex ? (
+        <Link href={path}>
+          <Title active={active}>{name}</Title>
+        </Link>
+      ) : (
+        <Title>{name}</Title>
+      )}
     </FolderTitleContainer>
   )
 }
-export default ({ name, tree }) => {
+export default ({ dir, active, tree }) => {
   const [unfold, setUnfold] = useState(true)
   return (
     <SubContainer>
-      <FolderTitle {...{ name, unfold, setUnfold }} />
+      <FolderTitle {...{ dir, active, unfold, setUnfold }} />
       {unfold && <SubMenu>{tree}</SubMenu>}
     </SubContainer>
   )

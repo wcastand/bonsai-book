@@ -8,7 +8,7 @@
     "bonsai-book": "./cli.js"
   },
   "scripts": {
-    "dev": "NODE_ENV=devmode cd example && node ../cli.js",
+    "dev": "cd example && NODE_ENV=devmode node ../cli.js",
     "start": "cd example && node ../cli.js"
   },
   "dependencies": {

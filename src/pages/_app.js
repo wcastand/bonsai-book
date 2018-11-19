@@ -31,6 +31,16 @@ const MyApp = ({ Component, pageProps, currentPage }) => {
     setTree(res.tree)
   }
 
+  const getSource = () => {
+    const currentStory =
+      currentPage !== '/' && stories.length !== 0 ? stories.find(r => r.path === currentPage) : null
+
+    if (currentStory.isDir && currentStory.hasIndex)
+      return stories.find(r => r.path === currentStory.path + '/index').src
+    if (!currentStory.isDir) return currentStory.src
+    return null
+  }
+
   useEffect(() => {
     const socket = io()
     socket.on('stories', handleStories)
@@ -39,10 +49,7 @@ const MyApp = ({ Component, pageProps, currentPage }) => {
       socket.close()
     }
   }, [])
-  const source =
-    currentPage !== '/' && stories.length !== 0
-      ? stories.filter(r => r.path === currentPage)[0].src
-      : null
+  const source = getSource()
   return (
     <Container>
       <IconContext.Provider value={{ className: 'react-icons' }}>
@@ -60,7 +67,6 @@ const MyApp = ({ Component, pageProps, currentPage }) => {
 MyApp.getChildContext = App.getChildContext
 MyApp.getInitialProps = async ({ Component, router, ctx }) => {
   let pageProps = {}
-
   if (Component.getInitialProps) {
     pageProps = await Component.getInitialProps(ctx)
   }

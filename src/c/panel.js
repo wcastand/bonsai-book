@@ -36,13 +36,13 @@ export default ({ stories, tree, currentPage }) => {
       if (Array.isArray(id)) {
         const dir = filteredStories.find(story => story.id === id[0])
         if (dir) {
-          const name = dir.name
           const tree = makeMenu(id[1])
-          return <Dir key={`dir_${name}`} {...{ name, tree }} />
+          const active = currentPage === dir.path
+          return <Dir key={`dir_${dir.name}`} {...{ dir, active, tree }} />
         }
       } else {
         const file = filteredStories.find(story => story.id === id)
-        if (file) {
+        if (file && file.name !== 'index') {
           const active = currentPage === file.path
           return <File key={`dir_item_${id}`} {...{ file, active, id }} />
         }
