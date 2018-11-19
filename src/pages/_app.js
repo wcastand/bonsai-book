@@ -32,9 +32,11 @@ const MyApp = ({ Component, pageProps, currentPage }) => {
   }
 
   const getSource = () => {
-    const currentStory =
-      currentPage !== '/' && stories.length !== 0 ? stories.find(r => r.path === currentPage) : null
-
+    if (currentPage === '/') {
+      const currentStory = stories.find(r => r.path === '/index')
+      return typeof currentStory === 'undefined' ? null : currentStory.src
+    }
+    const currentStory = stories.length !== 0 ? stories.find(r => r.path === currentPage) : null
     if (currentStory !== null && currentStory.isDir && currentStory.hasIndex)
       return stories.find(r => r.path === currentStory.path + '/index').src
     if (currentStory !== null && !currentStory.isDir) return currentStory.src
@@ -49,7 +51,9 @@ const MyApp = ({ Component, pageProps, currentPage }) => {
       socket.close()
     }
   }, [])
+
   const source = getSource()
+
   return (
     <Container>
       <IconContext.Provider value={{ className: 'react-icons' }}>
