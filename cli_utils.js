@@ -9,15 +9,13 @@ const project_dir = path.resolve(process.cwd(), './.bonsai')
 const src_dir = path.resolve(__dirname, './src')
 
 const copySrcFiles = file_path => {
-  const src_dir = path.resolve(process.cwd(), './src')
-  const src = path.resolve(process.cwd(), file_path)
+  const src = path.resolve(src_dir, file_path)
   const file_content = fs.readFileSync(src, 'UTF-8')
 
   const dest = path.resolve(process.cwd(), './.bonsai', path.relative(src_dir, file_path))
   fs.createWriteStream(dest, 'UTF-8').write(file_content)
 }
 const createSrcDir = dir_path => {
-  const src_dir = path.resolve(process.cwd(), './src')
   const dest = path.resolve(process.cwd(), './.bonsai', path.relative(src_dir, dir_path))
   if (!fs.existsSync(dest))
     fs.mkdir(dest, err => (err ? console.error(err) : console.info('directory created')))

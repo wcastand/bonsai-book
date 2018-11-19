@@ -26,19 +26,17 @@ if (!fs.existsSync(project_dir)) {
 
 const launchBonsai = () => {
   const bonsai = require(project_dir + '/server')
-  const watcher = require(project_dir + '/watcher')
   switch (cli.input[0]) {
     case 'start':
     default:
-      watcher(() => {
-        bonsai()
-      })
+      bonsai()
       break
   }
 }
 
 if (superDev) {
-  const dev_watcher = chokidar.watch('./src/**/*')
+  console.log('super dev mode')
+  const dev_watcher = chokidar.watch(path.resolve(__dirname, './src/**/*'))
   dev_watcher
     .on('add', copySrcFiles)
     .on('change', copySrcFiles)

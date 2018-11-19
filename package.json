@@ -8,25 +8,13 @@
     "bonsai-book": "./cli.js"
   },
   "scripts": {
-    "dev": "NODE_ENV=devmode node ./cli.js",
-    "start": "NODE_ENV=development node ./cli.js"
-  },
-  "peerDependencies": {
-    "next": "^7.0.2",
-    "prop-types": "^15.6.2",
-    "react": "^16.7.0-alpha.0",
-    "react-dom": "^16.7.0-alpha.0"
-  },
-  "devDependencies": {
-    "next": "^7.0.2",
-    "prop-types": "^15.6.2",
-    "react": "^16.7.0-alpha.0",
-    "react-dom": "^16.7.0-alpha.0"
+    "dev": "cd example && NODE_ENV=devmode node ../cli.js",
+    "start": "cd example && node ../cli.js"
   },
   "dependencies": {
     "babel-plugin-macros": "^2.4.2",
-    "preval.macro": "^3.0.0",
     "chokidar": "^2.0.4",
+    "copy-webpack-plugin": "^4.6.0",
     "emotion": "^9.2.12",
     "emotion-server": "^9.2.12",
     "express": "^4.16.4",
@@ -35,12 +23,18 @@
     "isomorphic-fetch": "^2.2.1",
     "meow": "^5.0.0",
     "ncp": "^2.0.0",
+    "next": "^7.0.2",
+    "preval.macro": "^3.0.0",
+    "prop-types": "^15.6.2",
+    "react": "^16.7.0-alpha.0",
+    "react-dom": "^16.7.0-alpha.0",
     "react-emotion": "^9.2.12",
     "react-highlight": "^0.12.0",
     "react-icons": "^3.2.2",
     "react-spring": "^6.1.8",
     "shortid": "^2.2.14",
     "socket.io": "^2.1.1",
-    "watchr": "^4.0.1"
+    "webpack": "^4.25.1",
+    "webpack-watch-files-plugin": "^1.0.2"
   }
 }

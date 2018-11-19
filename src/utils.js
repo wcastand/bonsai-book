@@ -13,11 +13,13 @@ const getSubTree = () => {
     const s = fs.lstatSync(p)
     const name = f.replace(ext, '')
     const isDir = s.isDirectory()
+    const hasIndex = isDir && fs.readdirSync(p).includes('index.js')
     stories.push({
       id,
       name,
       path: rp,
       isDir,
+      hasIndex,
       ...(!isDir && { src: fs.readFileSync(p, 'UTF-8') }),
     })
     return isDir ? [id, fs.readdirSync(p).map(traverse(p))] : id
@@ -28,6 +30,19 @@ const getSubTree = () => {
   return { tree, stories }
 }
 
+const fixPaths = content => {
+  const new_content = content.replace(/(from ['|"])([\.].*)(['|"])/gm, (match, p1, p2, p3) => {
+    const old_path = path.resolve(config.stories_dir, p2)
+    const pages_dir = path.resolve(process.cwd(), './.bonsai', 'pages')
+    const new_path = path.relative(pages_dir, old_path)
+    return `${p1}${new_path}${p3}`
+  })
+  return new_content
+}
+
+const transform = content => fixPaths(content.toString())
+
 module.exports = {
   getSubTree,
+  transform,
 }
