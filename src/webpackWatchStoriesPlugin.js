@@ -40,12 +40,6 @@ const copyFiles = root => {
 class CustomWatchPlugin {
   apply(compiler) {
     compiler.hooks.afterCompile.tap('CustomWatchPlugin', compilation => {
-      const files = glob.sync('*', { matchBase: 'true', cwd: stories_dir })
-      files.map(f => {
-        writeFile(f)
-        //   // compilation.contextDependencies.remove(path.resolve(dest, f))
-        //   compilation.fileDependencies.add(path.resolve(f))
-      })
       if (compilation.contextDependencies.has(dest)) compilation.contextDependencies.remove(dest)
       compilation.contextDependencies.add(stories_dir)
     })
