@@ -7,11 +7,11 @@
 
 ## Introduction
 
-I started Bonsai with the idea of providing an alternative to storybook focused on react and providing less functionnality but with a more quicker way to start using it. If your looking for highly customisable book for sharing your component, i strongly advise you to look at storybook.
+I started Bonsai with the idea of providing an alternative to storybook focused on react and providing less functionnality but with a quicker way to start using it. If your looking for highly customisable book for sharing your component, i strongly advise you to look at storybook.
 
 If you want a quick way to start a book of your react components, bonsai might be for you.
 
-To provide that powerfull tool without the least amount of configuration needed as possible, bonsai is based on NextJs. It uses the power of Next to provide HMR/auto-reloading of your react components and a routing based on folder structure of your `stories`.
+To provide that powerfull tool with the least amount of configuration needed as possible, bonsai is based on NextJs. It uses the power of Next to provide HMR/auto-reloading/... of your react components and a routing based on folder structure of your `stories`.
 
 ## Getting Started
 
