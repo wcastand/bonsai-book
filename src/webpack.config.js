@@ -1,24 +1,12 @@
-const path = require('path')
+const { join, resolve } = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const WatchExternalFilesPlugin = require('webpack-watch-files-plugin').default
 
-const CustomWatchPlugin = require('./webpackWatchStoriesPlugin')
-const CopyPlugin = require('./webpackCopyPlugin')
+const { transform } = require('./utils')
 
 const config = require('./config')
-const stories_dir = path.resolve(process.cwd(), config.stories_dir)
 const internalNodeModulesRegExp = /src(?!\/(?!.*js))/
-
-const fixPaths = content => {
-  const new_content = content.replace(/(from ['|"])([\.].*)(['|"])/gm, (match, p1, p2, p3) => {
-    const old_path = path.resolve(stories_dir, p2)
-    const pages_dir = path.resolve(process.cwd(), './.bonsai', 'pages')
-    const new_path = path.relative(pages_dir, old_path)
-    return `${p1}${new_path}${p3}`
-  })
-  return new_content
-}
-
-const transform = content => fixPaths(content.toString())
+const stories_dir = resolve(config.stories_dir)
 
 module.exports = {
   webpack: (webpackConfig, { dev, defaultLoaders }) => {
@@ -29,16 +17,11 @@ module.exports = {
       include: [internalNodeModulesRegExp],
     })
     webpackConfig.module.rules.forEach(mod => {
-      mod.include.push(process.cwd())
+      mod.include.push(...config.webpack.include)
     })
-    webpackConfig.context = path.resolve(process.cwd())
     webpackConfig.plugins.push(
-      // new CopyPlugin(),
-      new CustomWatchPlugin(),
-      new CopyWebpackPlugin(
-        [{ from: stories_dir, to: path.resolve(process.cwd(), './.bonsai/pages/'), transform }],
-        { debug: true },
-      ),
+      new CopyWebpackPlugin([{ from: stories_dir, to: resolve('./.bonsai/pages/'), transform }]),
+      new WatchExternalFilesPlugin({ files: [join(stories_dir, '**/*')] }),
     )
 
     return webpackConfig

@@ -28,6 +28,19 @@ const getSubTree = () => {
   return { tree, stories }
 }
 
+const fixPaths = content => {
+  const new_content = content.replace(/(from ['|"])([\.].*)(['|"])/gm, (match, p1, p2, p3) => {
+    const old_path = path.resolve(config.stories_dir, p2)
+    const pages_dir = path.resolve(process.cwd(), './.bonsai', 'pages')
+    const new_path = path.relative(pages_dir, old_path)
+    return `${p1}${new_path}${p3}`
+  })
+  return new_content
+}
+
+const transform = content => fixPaths(content.toString())
+
 module.exports = {
   getSubTree,
+  transform,
 }
