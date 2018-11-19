@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/src/static/logo.png" height="150px" />
+  <img src="/src/static/logo.png" alt="Bonsai"/>
   <span align="center" style="font-weight:bold;font-size:35px;">Bonsai Book</span>
 </p>
 
